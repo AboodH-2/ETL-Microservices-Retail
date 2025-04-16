@@ -1,0 +1,102 @@
+version: '3'
+
+services:
+  # Load Balancer
+  load-balancer:
+    image: nginx:latest
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "80:80"
+    depends_on:
+      - frontend
+      - backend-api
+    networks:
+      - retail-network
+    restart: always
+
+  # Frontend Web Server (scalable)
+  frontend:
+    build: ./frontend
+    expose:
+      - "5000"
+    depends_on:
+      - backend-api
+    networks:
+      - retail-network
+    restart: always
+    deploy:
+      replicas: 2
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+
+  # Backend API Server (scalable)
+  backend-api:
+    build: ./backend
+    expose:
+      - "5001"
+    depends_on:
+      - postgres-db
+      - mysql-db
+    networks:
+      - retail-network
+    restart: always
+    volumes:
+      - ./backend:/app
+    deploy:
+      replicas: 3
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+
+  # PostgreSQL Database
+  postgres-db:
+    image: postgres:13
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres_password
+      - POSTGRES_DB=retail
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./postgres-init:/docker-entrypoint-initdb.d
+    expose:
+      - "5432"
+    networks:
+      - retail-network
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 5s
+      retries: 5
+
+  # MySQL Database
+  mysql-db:
+    image: mysql:8.0
+    environment:
+      - MYSQL_ROOT_PASSWORD=root_password
+      - MYSQL_DATABASE=retail_dw
+      - MYSQL_USER=mysql
+      - MYSQL_PASSWORD=mysql_password
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./mysql-init:/docker-entrypoint-initdb.d
+    expose:
+      - "3306"
+    networks:
+      - retail-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "mysql", "-pmysql_password"]
+      interval: 5s
+      retries: 5
+
+networks:
+  retail-network:
+    driver: bridge
+
+volumes:
+  postgres-data:
+  mysql-data: 

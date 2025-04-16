@@ -1,0 +1,122 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Docker
+.env
+.env.local
+.env.*.local
+
+# Airflow logs
+docker-airflow/logs/
+
+# Databases
+*.sqlite
+*.db
+*.rdb
+
+# Docker volumes
+postgres-data/
+mysql-data/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IDEs and editors
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# Logs
+logs/
+*.log
+
+# Temp files
+temp_submission/
+*.tmp
+*.temp
+
+# Distribution / packaging
+*.zip
+*.tar.gz
+*.rar
+
+# Environment
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+
+# Virtual environments
+venv/
+env/
+ENV/
+
+# Docker volumes
+**/data/
+
+# Airflow
+airflow/logs/
+airflow/plugins/
+airflow/*.pid
+
+# Database data
+*.db
+*.sqlite3
+
+# Logs
+logs/
+*.log
+
+# Environment variables
+.env
+.env.*
+
+# IDE specific files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS specific files
+.DS_Store
+Thumbs.db
+
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates 
